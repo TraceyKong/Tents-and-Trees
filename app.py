@@ -1,15 +1,13 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, current_app
 from game.PuzzleGenerator import PuzzleGenerator
 from game.GameManager import GameManager
 
 app = Flask(__name__)
-
-
-gameManager = GameManager(None, 5)
+app.config['GAME'] = GameManager(None, 5)
 
 @app.route('/', methods=['GET'])
 def home():
-    grid = gameManager.puzzle
+    grid = current_app.config['GAME'].puzzle
     grid.displayGrid()
     colValues = grid.colValues
     content = []
@@ -26,6 +24,7 @@ def get_move():
     pos = request.args.get('pos', '')[1:-1]
     pos = pos.split(',')
     pos = (int(pos[0]), int(pos[1]))
-    gameManager.play(pos)
-    grid = gameManager.puzzle  
-    return jsonify(content=grid.getCellValue(pos),status=gameManager.solved)
+    game = current_app.config['GAME']
+    game.play(pos)
+    grid = current_app.config['GAME'].puzzle  
+    return jsonify(content=grid.getCellValue(pos),status=game.solved)
