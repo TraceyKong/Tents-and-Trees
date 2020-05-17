@@ -23,3 +23,4 @@ To see the solution and end the game, enter __show solution__.
 
 ## Computer
 The computer will find a valid solution for the grid, then give the game the positions of the tents in that solution
+

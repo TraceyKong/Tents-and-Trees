@@ -5,6 +5,7 @@ class Player:
     
     def getMove(self, grid):
         """ Evaluates the user input to determine and return the next move """
+
         cells = grid.getAvailableCells()
 
         while True:

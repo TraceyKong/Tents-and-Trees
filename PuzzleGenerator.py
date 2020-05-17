@@ -16,7 +16,7 @@ class PuzzleGenerator:
         """ Generating the puzzle """
         self.placeTents()                                   # places tents on the grid
         self.placeTrees()                                   # places trees on the grid
-        self.grid.updateValues() 
+        self.grid.updateValues()                            # updates the numbers of tents on each row and column
 
     def getPuzzle(self):
         """

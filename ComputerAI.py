@@ -165,3 +165,4 @@ class ComputerAI:
                 abs(tent[1][1]-pos[1][1]) <= 1)):
                 self.validTents.remove(tent)
         return pos
+

@@ -87,7 +87,6 @@ class Grid:
                             (pos[0], pos[1]-1),
                             (pos[0], pos[1]+1),
                             (pos[0]+1, pos[1])]
-
         return [cell for cell in cells if self.checkWithinGrid(cell)]
 
     def getAvailableAdjacentCells(self, pos: tuple):
