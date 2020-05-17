@@ -1,5 +1,6 @@
 from PuzzleGenerator import PuzzleGenerator
 from Tree import Tree
+from copy import deepcopy
 
 
 
@@ -11,8 +12,8 @@ sol = gen.getSolution()
 class HAI:
     def __init__(self, puzzle):
         self.placedTents = []
-        self.solveRow = puzzle.rowValues
-        self.solveCol = puzzle.colValues
+        self.solveRow = deepcopy(puzzle.rowValues)
+        self.solveCol = deepcopy(puzzle.colValues)
         self.puzzle = puzzle
         initialTreeList = puzzle.getTrees()
         self.trees = []
@@ -29,7 +30,7 @@ class HAI:
 
     
     def solve(self):
-        while not self.isSolved():
+        while len(self.trees) > 0:
             self.placeTent(self.trees[0].possibleTentsList[0])
             self.trees.pop(0)
             for tree in self.trees:
