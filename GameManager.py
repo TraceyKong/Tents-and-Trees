@@ -46,7 +46,6 @@ class GameManager:
 
             # restarts the puzzle
             elif move == -1:
-                restarts = restarts + 1
                 print("Restart")
                 self.restart()
             
