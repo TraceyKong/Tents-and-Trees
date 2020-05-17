@@ -4,13 +4,14 @@ from copy import deepcopy
 
 
 
-gen = PuzzleGenerator(6)
+gen = PuzzleGenerator(8)
 puzzle = gen.getPuzzle()
 sol = gen.getSolution()
 
 
 class HAI:
     def __init__(self, puzzle):
+        self.backtrackList = []
         self.placedTents = []
         self.solveRow = deepcopy(puzzle.rowValues)
         self.solveCol = deepcopy(puzzle.colValues)
@@ -31,11 +32,26 @@ class HAI:
     
     def solve(self):
         while len(self.trees) > 0:
+            self.backtrackList.append(deepcopy(self))
+
             self.placeTent(self.trees[0].possibleTentsList[0])
             self.trees.pop(0)
             for tree in self.trees:
                 tree.findPossibleTents(self.puzzle, self.solveRow, self.solveCol)
             self.trees.sort(key=lambda x: x.numPossibleTents)
+
+            #backtrack in case of invalid tree
+            if len(self.trees) > 0 and self.trees[0].numPossibleTents <= 0:
+                self = self.backtrackList[-1]
+                self.backtrackList.pop(-1)
+                self.trees[0].possibleTentsList.pop(0)
+                self.trees[0].numPossibleTents -= 1
+                while self.trees[0].numPossibleTents <= 0: #python has no do while unfortunatly
+                    self = self.backtrackList[-1]
+                    self.backtrackList.pop(-1)
+                    self.trees[0].possibleTentsList.pop(0)
+                    self.trees[0].numPossibleTents -= 1
+
         return self.puzzle
             
 
