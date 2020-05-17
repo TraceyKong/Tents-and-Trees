@@ -22,4 +22,4 @@ To see the solution and end the game, enter __show solution__.
 <br/> 
 
 ## Computer
-The computer will chose a random valid tent and will update its list of valid tents with the new information. If it hits a spot with no valid tents, it just restarts
+The computer will find a valid solution for the grid, then give the game the positions of the tents in that solution
