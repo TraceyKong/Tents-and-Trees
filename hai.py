@@ -3,7 +3,7 @@ from Tree import Tree
 
 
 
-gen = PuzzleGenerator(8)
+gen = PuzzleGenerator(6)
 puzzle = gen.getPuzzle()
 sol = gen.getSolution()
 
@@ -25,6 +25,7 @@ class HAI:
         self.puzzle.map[pos[0]][pos[1]] = '#'
         self.solveRow[pos[0]] -= 1
         self.solveCol[pos[1]] -= 1
+        self.placedTents.append(pos)
 
     
     def solve(self):

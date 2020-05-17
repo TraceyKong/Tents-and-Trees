@@ -123,8 +123,11 @@ class Grid:
             return False
 
         
-        neighbors = self.getNeighborCells(pos)
-        for neighbor in neighbors:
+        neighborsPos = self.getNeighborCells(pos)
+        test = self.map[neighborsPos[0][0]][neighborsPos[0][1]]
+        neighborsVal = [list(self.map[neighbor[0]][neighbor[1]] for neighbor in neighborsPos)]
+        
+        for neighbor in neighborsVal:
             if neighbor == '#':
                 return False
         return True
