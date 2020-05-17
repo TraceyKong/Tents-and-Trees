@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, jsonify, current_app, url_for
 from game.PuzzleGenerator import PuzzleGenerator
 from game.GameManager import GameManager
-from simpleForm import LevelForm
 import os
 
 app = Flask(__name__)
