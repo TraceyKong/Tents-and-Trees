@@ -1,7 +1,10 @@
 import re
 
 class Player:
+    """ A class used to represent the human player """
+    
     def getMove(self, grid):
+        """ Evaluates the user input to determine and return the next move """
         cells = grid.getAvailableCells()
 
         while True:

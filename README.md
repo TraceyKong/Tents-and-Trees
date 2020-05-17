@@ -23,4 +23,3 @@ To see the solution and end the game, enter __show solution__.
 
 ## Computer
 The computer will chose a random valid tent and will update its list of valid tents with the new information. If it hits a spot with no valid tents, it just restarts
-
