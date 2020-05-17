@@ -12,7 +12,19 @@ class GameManager:
 
     def checkSolved(self):
         """ Checks whether the puzzle grid is equal to the solution grid """
-        return self.puzzle.map == self.solution.map
+        if(self.puzzle.map == self.solution.map):
+            return True
+        else:
+            tents = self.puzzle.getTents()
+            for col in range(self.puzzle.size):
+                c_tents = [pos for pos in tents if pos[1] == col]
+                if len(c_tents) != self.puzzle.colValues[col]:
+                    return False
+            for row in range(self.puzzle.size):
+                r_tents = [pos for pos in tents if pos[0] == row]
+                if len(r_tents) != self.puzzle.rowValues[row]:
+                    return False
+                return True
     
     def restart(self):
         """ Restores the puzzle grid to the beginning """
