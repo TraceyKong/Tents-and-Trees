@@ -21,7 +21,6 @@ class PuzzleGenerator:
     def getPuzzle(self):
         """
             Returns a copy of the grid without tents
-
             Erases the tents before returning the grid copy
         """
         gridClone = self.grid.clone()

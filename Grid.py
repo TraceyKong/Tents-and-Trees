@@ -87,8 +87,12 @@ class Grid:
                             (pos[0], pos[1]-1),
                             (pos[0], pos[1]+1),
                             (pos[0]+1, pos[1])]
+        return [cell for cell in cells if self.checkWithinGrid(cell)]
 
-            return [cell for cell in cells if self.checkWithinGrid(cell)]
+    def getAvailableAdjacentCells(self, pos: tuple):
+        """ Returns empty cells that are adjacent to the position """
+        if self.checkWithinGrid(pos):
+            return [cell for cell in self.getAdjacentCells(pos) if self.map[cell[0]][cell[1]] == '-']
 
     def getNeighborCells(self, pos: tuple):
         """ Returns cells that are adjacent or diagonal to the position """

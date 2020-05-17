@@ -22,6 +22,5 @@ To see the solution and end the game, enter __show solution__.
 <br/> 
 
 ## Computer
-Right now, the computer does not know how to solve the puzzle. It simply endlessly selects a random empty cell to place a tent on and restarts when the number of placed tents is equal to the number of trees.
-
+The computer will find a valid solution for the grid, then give the game the positions of the tents in that solution
 
