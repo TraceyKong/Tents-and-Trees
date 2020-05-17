@@ -46,4 +46,4 @@ def get_move():
     grid = game.puzzle
     status = game.solved
 
-    return jsonify(content=grid.getCellValue(pos), status=status)
+    return jsonify(content=grid.getCellValue(pos), status=status, grid=grid.map)
