@@ -6,10 +6,10 @@ app = Flask(__name__)
 
 
 gameManager = GameManager(None, 5)
-grid = gameManager.puzzle
 
 @app.route('/', methods=['GET'])
 def home():
+    grid = gameManager.puzzle
     grid.displayGrid()
     colValues = grid.colValues
     content = []
@@ -26,5 +26,6 @@ def get_move():
     pos = request.args.get('pos', '')[1:-1]
     pos = pos.split(',')
     pos = (int(pos[0]), int(pos[1]))
-    gameManager.play(pos)    
+    gameManager.play(pos)
+    grid = gameManager.puzzle  
     return jsonify(content=grid.getCellValue(pos),status=gameManager.solved)
