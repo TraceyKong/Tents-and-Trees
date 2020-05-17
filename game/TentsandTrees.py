@@ -1,6 +1,6 @@
-from ComputerAI import ComputerAI
-from Player import Player
-from GameManager import GameManager
+from .ComputerAI import ComputerAI
+from .Player import Player
+from .GameManager import GameManager
 import sys
 
 if __name__ == "__main__":
