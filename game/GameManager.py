@@ -1,9 +1,10 @@
 from .PuzzleGenerator import PuzzleGenerator
+import time
 
 class GameManager:
     """ A class used to represent the game manager """
-
-    def __init__(self, player, size=8):
+    
+    def __init__(self, player, size=10):
         self.size = size                                        # the size of the puzzle
         self.puzzleGenerator = PuzzleGenerator(size)            # the puzzle generator
         self.puzzle = self.puzzleGenerator.getPuzzle()          # the grid of the puzzle
@@ -44,15 +45,18 @@ class GameManager:
 
     def start(self):
         """ Runs the puzzle """
+        turns = 0
+        start = time.process_time()
+
         self.puzzle.displayGrid()
 
         while not self.checkSolved():
             move = self.player.getMove(self.puzzle)
-
+            turns = turns + 1
             if move != -1 and move != 0 and self.puzzle.checkWithinGrid(move[1]):
                 action = move[0]
                 pos = move[1]
-                
+
                 # places tent on position
                 if action == "place":
                     print("Placed tent on ", pos[0],',',pos[1])
@@ -77,8 +81,9 @@ class GameManager:
                 print("Solution:")
                 self.solution.displayGrid()
                 break
+        self.puzzle.displayGrid()
+        print("Congrats! You've solved the puzzle in " + str(turns) + " turns and "+
+              str(time.process_time() - start) + " seconds.")
 
-        print("Congrats! You've solved the puzzle.")
 
-
-    
+  
