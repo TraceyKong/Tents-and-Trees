@@ -3,8 +3,8 @@ from Tree import Tree
 from copy import deepcopy
 
 
-
-gen = PuzzleGenerator(8)
+print("test")
+gen = PuzzleGenerator(9)
 puzzle = gen.getPuzzle()
 sol = gen.getSolution()
 
@@ -42,13 +42,13 @@ class HAI:
 
             #backtrack in case of invalid tree
             if len(self.trees) > 0 and self.trees[0].numPossibleTents <= 0:
-                self = self.backtrackList[-1]
-                self.backtrackList.pop(-1)
+                self = self.backtrackList.pop(-1)
+                #self.backtrackList.pop(-1)
                 self.trees[0].possibleTentsList.pop(0)
                 self.trees[0].numPossibleTents -= 1
                 while self.trees[0].numPossibleTents <= 0: #python has no do while unfortunatly
-                    self = self.backtrackList[-1]
-                    self.backtrackList.pop(-1)
+                    self = self.backtrackList.pop(-1)
+                    #self.backtrackList.pop(-1)
                     self.trees[0].possibleTentsList.pop(0)
                     self.trees[0].numPossibleTents -= 1
 
@@ -66,4 +66,4 @@ class HAI:
 
 obj = HAI(puzzle)
 out = obj.solve()
-print("test")
+print(out.map)
