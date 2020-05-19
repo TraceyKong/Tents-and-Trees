@@ -14,8 +14,7 @@ class PuzzleGenerator:
         self.difficulty = math.floor(self.size ** 2 * 0.2)  # the number of pairs of tents and trees
 
         """ Generating the puzzle """
-        self.placeTents()                                   # places tents on the grid
-        self.placeTrees()                                   # places trees on the grid
+        self.placeTentsAndTrees()                           # places tents and trees on the grid
         self.grid.updateValues()                            # updates the numbers of tents on each row and column
 
     def getPuzzle(self):
@@ -34,23 +33,19 @@ class PuzzleGenerator:
         """ Returns a copy of the grid """
         return self.grid.clone()
 
-    def placeTents(self):
+    def placeTentsAndTrees(self):
         """ Places tents on the grid randomly """
         for i in range(self.difficulty):
             available_cells = self.grid.getAvailableCells()
-            new_cell = random.choice(available_cells)
-            while not self.grid.checkValidTentPosition(new_cell):
-                new_cell = random.choice(available_cells)
-            self.grid.setCellValue(new_cell, '#')
-    
-    def placeTrees(self):
-        """ Places trees next to the tents randomly """
-        tents = self.grid.getTents()
-        for cell in tents:
-            cells = self.grid.getAdjacentCells(cell)
-            new_cell = random.choice(cells)
-            while self.grid.getCellValue(new_cell) != '-':
-                new_cell = random.choice(cells)
-            self.grid.setCellValue(new_cell, 'T')
-
-    
+            random.shuffle(available_cells)
+            placed = False
+            for c in available_cells:
+                if (self.grid.checkValidTentPosition(c) and 
+                    len(self.grid.getAvailableAdjacentCells(c)) > 0):
+                    self.grid.setCellValue(c, '#')
+                    self.grid.setCellValue(random.choice(self.grid.getAvailableAdjacentCells(c)), 'T')
+                    placed = True
+                    break
+            if not placed:
+                self.difficulty = i
+                break

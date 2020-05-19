@@ -54,8 +54,6 @@ class ComputerAI:
         """
         if self.solved(grid):
             return True
-        #sort by minimum remaining values
-        self.validTents.sort(key = lambda x: len(x[1]))
         currentTree = self.validTents[0]
         #create copy of previous values for backtracking
         previousValidTents = deepcopy(self.validTents)
@@ -124,4 +122,3 @@ class ComputerAI:
                     toRemove.append(tent)
             for tent in toRemove:
                 tree[1].remove(tent)
-

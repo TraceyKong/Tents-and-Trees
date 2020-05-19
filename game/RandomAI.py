@@ -1,20 +1,12 @@
+import random
 from copy import deepcopy
 
-class ComputerAI:
-    
-    """ 
-        A class used to represent the human player 
-        Finds the correct tents using basic backtracking search
-        TODO:
-            DFS-backtracking search - done, no optimizations
-            Arc-consitency tests
-    """
+class RandomAI:
     
     def __init__(self):
         self.validTents = []
         self.rowValues = []
         self.colValues = []
-        self.solvedTents = []
         self.turn = 0
     
     def getMove(self, grid):
@@ -26,11 +18,14 @@ class ComputerAI:
             self.validTents = self.getValidTents(grid)
             self.rowValues = deepcopy(grid.rowValues)
             self.colValues = deepcopy(grid.colValues)
-            tempGrid = grid.clone()
-            self.solve(tempGrid)
         self.turn = self.turn + 1
-        #return each position of the tents
-        return["place", self.solvedTents[self.turn - 1][1]]
+        #a valid tent exists and there are fewer tents than trees
+        if len(self.validTents) != 0 and not self.invalidState(grid):
+            return ["place",self.makeRandomMove()[1]]
+        #no valid tent exists, restart the board
+        else:
+            self.turn = 0
+            return -1
     
 
     def getValidTents(self, grid):
@@ -47,47 +42,7 @@ class ComputerAI:
                     treeAndTent[1].append(n)
             tents.append(treeAndTent)
         return tents
-             
-    def solve(self, grid):
-        """
-            Generates list of correct tent locations
-        """
-        if self.solved(grid):
-            return True
-        #sort by minimum remaining values
-        self.validTents.sort(key = lambda x: len(x[1]))
-        currentTree = self.validTents[0]
-        #create copy of previous values for backtracking
-        previousValidTents = deepcopy(self.validTents)
-        previousRowValues = deepcopy(self.rowValues)
-        previousColValues = deepcopy(self.colValues)
-        for currentTent in currentTree[1]:
-            #place tent in a cell, assume it's correct
-            self.updateValidTents( (currentTree[0], currentTent) )
-            self.solvedTents.append( (currentTree[0], currentTent) )
-            grid.setCellValue(currentTent,'#')
-            #test if cell is in a valid spot for a tent
-            if not self.invalidState(grid):
-                result = self.solve(grid)
-                if result:
-                    return result
-            #cell not valid, backtrack
-            self.solvedTents.remove( (currentTree[0], currentTent) )
-            grid.setCellValue(currentTent,'-')
-            #copy previous values if backtracking
-            self.validTents = deepcopy(previousValidTents)
-            self.rowValues = deepcopy(previousRowValues)
-            self.colValues = deepcopy(previousColValues)
-        return False
-            
-    
-    def solved(self,grid):
-        """
-            Returns True if there are as many tents as trees, False otherwise
-        """
-        if len(self.solvedTents) != len(grid.getTrees()):
-            return False
-        return True
+
         
     def invalidState(self, grid):
         """
@@ -124,4 +79,25 @@ class ComputerAI:
                     toRemove.append(tent)
             for tent in toRemove:
                 tree[1].remove(tent)
+    
+    """
+    following code is for random move selection
+    """
+    
+    def selectTent(self):
+        """
+            Returns a random (tent, tree) tuple from the list of valid moves
+        """
+        tree = random.choice(self.validTents)
+        tent = random.choice(tree[1])
+        return (tree[0],tent)
+    
+    def makeRandomMove(self):
+        """
+            Returns a random valid location for a tree
+            Updates list to remove locations that are no longer valid
+        """
+        pos = self.selectTent()
+        self.updateValidTents(pos)
+        return pos
 
