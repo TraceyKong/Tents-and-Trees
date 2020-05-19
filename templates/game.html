@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+    <script type=text/javascript>
+        $(function() {
+            var btn_width = $('.tent').innerWidth();
+            var top_width = $('.col-value').width();
+            $('.col-value').css({
+                "padding-left": ((btn_width - top_width) / 2) + 1,
+                "padding-right": (btn_width - top_width) / 2
+            });
+            var side_width = $('.side-val').innerWidth();
+            $('.col-values').css({
+                "padding-left": side_width
+            })
+            $('.tent').bind('click', function(e) {
+                e.preventDefault();
+                var me = this;
+                $.ajax({
+                    url: '/get_move',
+                    data: {
+                        pos: $(me).val()
+                    },
+                    complete: function (data) {
+                        console.log(data.responseJSON.grid)
+                        var img = document.createElement('img');
+                        if(data.responseJSON.content == "#"){
+                            img.src = "{{url_for('static', filename='tent.png')}}";
+                            img.className = "tree";
+                            $(me).html(img);
+                        }
+                        if(data.responseJSON.content == "-"){
+                            img.src = "{{url_for('static', filename='blank.png')}}";
+                            img.className = "tree";
+                            $(me).html(img);
+                        }
+                        if(data.responseJSON.status){
+                            $(".message").replaceWith("Congrats! You've won.");
+                        }
+                    }
+                });
+                return false;
+            });
+
+        });
+    </script>
+
+    <div class="main-puzzle">
+        <div>
+            <div class="btn-group col-values" role="group">
+                {% for col in colValues %}
+                    <div class="col text-center text-light bg-dark col-value">{{ col }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% for row in content %}
+            <div>
+                <div class="btn-group" role="group">
+                    <div class="col text-center text-light bg-dark side-val">{{ row[0] }}</div>
+                    {% for cell in row[1] %}
+                        <button type="button" class="btn btn-outline-dark tent" value="{{ cell[1] }}">
+                            {% if cell[0] == 'T' %}
+                                <img src="{{url_for('static', filename='tree.png')}}" class="tree">
+                            {% endif %}
+                            {% if cell[0] == '#' %}
+                                <img src="{{url_for('static', filename='tent.png')}}" class="tree">
+                            {% endif %}
+                            {% if cell[0] == '-' %}
+                                <img src="{{url_for('static', filename='blank.png')}}" class="tree">
+                            {% endif %}
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="message"></div>  
+    </div>   
+{% endblock %}

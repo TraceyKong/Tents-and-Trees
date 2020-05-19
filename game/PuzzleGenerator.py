@@ -1,5 +1,5 @@
 import random, math
-from Grid import Grid
+from .Grid import Grid
 
 class PuzzleGenerator:
     """

@@ -1,4 +1,4 @@
-from PuzzleGenerator import PuzzleGenerator
+from .PuzzleGenerator import PuzzleGenerator
 import time
 
 class GameManager:
@@ -10,6 +10,7 @@ class GameManager:
         self.puzzle = self.puzzleGenerator.getPuzzle()          # the grid of the puzzle
         self.solution = self.puzzleGenerator.getSolution()      # the grid of the solution
         self.player = player                                    # the player
+        self.solved = False
 
     def checkSolved(self):
         """ Checks whether the puzzle grid is equal to the solution grid """
@@ -25,11 +26,22 @@ class GameManager:
                 r_tents = [pos for pos in tents if pos[0] == row]
                 if len(r_tents) != self.puzzle.rowValues[row]:
                     return False
-                return True
+            return True
     
     def restart(self):
         """ Restores the puzzle grid to the beginning """
         self.puzzle = self.puzzleGenerator.getPuzzle()
+
+    def play(self, pos):
+        if not self.solved and self.puzzle.checkWithinGrid(pos):
+            if self.puzzle.getCellValue(pos) == '-':
+                self.puzzle.setCellValue(pos, '#')
+
+            elif self.puzzle.getCellValue(pos) == '#':
+                self.puzzle.setCellValue(pos, '-')
+            
+            if self.checkSolved():
+                self.solved = True
 
     def start(self):
         """ Runs the puzzle """
