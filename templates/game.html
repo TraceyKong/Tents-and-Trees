@@ -21,7 +21,6 @@
                         pos: $(me).val()
                     },
                     complete: function (data) {
-                        console.log(data.responseJSON.grid)
                         var img = document.createElement('img');
                         if(data.responseJSON.content == "#"){
                             img.src = "{{url_for('static', filename='tent.png')}}";
