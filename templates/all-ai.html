@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block home %}
+    <script type="text/javascript">
+        $(function() {
+            var btn_width = $('.bt_tent').innerWidth();
+            var top_width = $('.col-value').width();
+            $('.col-value').css({
+                "padding-left": ((btn_width - top_width) / 2) + 1,
+                "padding-right": (btn_width - top_width) / 2
+            });
+            var side_width = $('.side-val').innerWidth();
+            $('.col-values').css({
+                "padding-left": side_width
+            });
+            
+            $(".solve").bind('click', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "/solve_all",
+                    data: {},
+                    complete: function(data) {
+                        var bt_tents = data.responseJSON.bt_content;
+                        for(var i = 0; i < bt_tents.length; i++){
+                            pos = '(' + bt_tents[i][0] + ', ' + bt_tents[i][1] +')';
+                            var img = document.createElement('img');
+                            $(".bt_tent").each(function() {
+                                if($(this).attr("value") == pos){
+                                    img.src = "{{url_for('static', filename='tent.png')}}";
+                                    img.className = "tree";
+                                    $(this).html(img);
+                                }
+                            });
+                        }
+                        $("#bt-time").html("Time elasped: " +data.responseJSON.bt_time + "s");
+                        
+                        // HAI
+                        var hai_tents = data.responseJSON.hai_content;
+                        for(var i = 0; i < hai_tents.length; i++){
+                            pos = '(' + hai_tents[i][0] + ', ' + hai_tents[i][1] +')';
+                            var img = document.createElement('img');
+                            $(".hai_tent").each(function() {
+                                if($(this).attr("value") == pos){
+                                    img.src = "{{url_for('static', filename='tent.png')}}";
+                                    img.className = "tree";
+                                    $(this).html(img);
+                                }
+                            });
+                        }
+                        $("#hai-time").html("Time elasped: " +data.responseJSON.hai_time + "s");
+
+                        // MRV
+                        var mrv_tents = data.responseJSON.mrv_content;
+                        for(var i = 0; i < mrv_tents.length; i++){
+                            pos = '(' + mrv_tents[i][0] + ', ' + mrv_tents[i][1] +')';
+                            var img = document.createElement('img');
+                            $(".mrv_tent").each(function() {
+                                if($(this).attr("value") == pos){
+                                    img.src = "{{url_for('static', filename='tent.png')}}";
+                                    img.className = "tree";
+                                    $(this).html(img);
+                                }
+                            });
+                        }
+                        $("#mrv-time").html("Time elasped: " +data.responseJSON.mrv_time + "s");
+
+                        // Random
+                        var random_tents = data.responseJSON.random_content;
+                        for(var i = 0; i < random_tents.length; i++){
+                            pos = '(' + random_tents[i][0] + ', ' + random_tents[i][1] +')';
+                            var img = document.createElement('img');
+                            $(".random_tent").each(function() {
+                                if($(this).attr("value") == pos){
+                                    img.src = "{{url_for('static', filename='tent.png')}}";
+                                    img.className = "tree";
+                                    $(this).html(img);
+                                }
+                            });
+                        }
+                        $("#random-time").html("Time elasped: " +data.responseJSON.random_time + "s");
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+
+    <div classs="container">
+        <div class="row justify-content-center">
+            <div class="m-3">
+                <div>Backtracking</div>
+                <div>
+                    <div class="btn-group col-values" role="group">
+                        {% for col in colValues %}
+                            <div class="col text-center text-light bg-dark col-value">{{ col }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for row in bt_content %}
+                    <div>
+                        <div class="btn-group" role="group">
+                            <div class="col text-center text-light bg-dark side-val">{{ row[0] }}</div>
+                            {% for cell in row[1] %}
+                                <button type="button" class="btn btn-outline-dark bt_tent" value="{{ cell[1] }}" disabled>
+                                    {% if cell[0] == 'T' %}
+                                        <img src="{{url_for('static', filename='tree.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '#' %}
+                                        <img src="{{url_for('static', filename='tent.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '-' %}
+                                        <img src="{{url_for('static', filename='blank.png')}}" class="tree">
+                                    {% endif %}
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="m-4" id="bt-time"></div>
+            </div>
+
+            <div class="m-3">
+                <div>Heuristic Backtracking</div>
+                <div>
+                    <div class="btn-group col-values" role="group">
+                        {% for col in colValues %}
+                            <div class="col text-center text-light bg-dark col-value">{{ col }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for row in hai_content %}
+                    <div>
+                        <div class="btn-group" role="group">
+                            <div class="col text-center text-light bg-dark side-val">{{ row[0] }}</div>
+                            {% for cell in row[1] %}
+                                <button type="button" class="btn btn-outline-dark hai_tent" value="{{ cell[1] }}" disabled>
+                                    {% if cell[0] == 'T' %}
+                                        <img src="{{url_for('static', filename='tree.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '#' %}
+                                        <img src="{{url_for('static', filename='tent.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '-' %}
+                                        <img src="{{url_for('static', filename='blank.png')}}" class="tree">
+                                    {% endif %}
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="m-4" id="hai-time"></div>
+            </div>
+
+            <div class="m-4">
+                <button type="button" class="btn btn-dark solve">Solve</button>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="m-3">
+                <div>MRV</div>
+                <div>
+                    <div class="btn-group col-values" role="group">
+                        {% for col in colValues %}
+                            <div class="col text-center text-light bg-dark col-value">{{ col }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for row in mrv_content %}
+                    <div>
+                        <div class="btn-group" role="group">
+                            <div class="col text-center text-light bg-dark side-val">{{ row[0] }}</div>
+                            {% for cell in row[1] %}
+                                <button type="button" class="btn btn-outline-dark mrv_tent" value="{{ cell[1] }}" disabled>
+                                    {% if cell[0] == 'T' %}
+                                        <img src="{{url_for('static', filename='tree.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '#' %}
+                                        <img src="{{url_for('static', filename='tent.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '-' %}
+                                        <img src="{{url_for('static', filename='blank.png')}}" class="tree">
+                                    {% endif %}
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="m-4" id="mrv-time"></div>
+            </div>
+
+            <div class="m-3">
+                <div>Random</div>
+                <div>
+                    <div class="btn-group col-values" role="group">
+                        {% for col in colValues %}
+                            <div class="col text-center text-light bg-dark col-value">{{ col }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for row in random_content %}
+                    <div>
+                        <div class="btn-group" role="group">
+                            <div class="col text-center text-light bg-dark side-val">{{ row[0] }}</div>
+                            {% for cell in row[1] %}
+                                <button type="button" class="btn btn-outline-dark random_tent" value="{{ cell[1] }}" disabled>
+                                    {% if cell[0] == 'T' %}
+                                        <img src="{{url_for('static', filename='tree.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '#' %}
+                                        <img src="{{url_for('static', filename='tent.png')}}" class="tree">
+                                    {% endif %}
+                                    {% if cell[0] == '-' %}
+                                        <img src="{{url_for('static', filename='blank.png')}}" class="tree">
+                                    {% endif %}
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="m-4" id="random-time"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

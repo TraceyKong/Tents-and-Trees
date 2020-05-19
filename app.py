@@ -219,3 +219,77 @@ def solve_mrv_ai():
     tents = [tent[1] for tent in current_app.config['MRV-AI'].solvedTents]
 
     return jsonify(solved_content=tents, time=t0)
+
+############################# ALL AI Page ###############################
+@app.route('/all-home', methods=['GET','POST'])
+def all_home():
+    if request.method == 'POST':
+        level = request.form['all-level']
+        app.config['ALL_LEVEL'] = level
+        return redirect(url_for('all_ai'))
+    else:
+        return render_template('all-home.html')
+
+@app.route('/all-ai')
+def all_ai():
+    app.config['GAME'] = GameManager(None, int(current_app.config['ALL_LEVEL']))
+
+    grid = current_app.config['GAME'].puzzle
+
+    colValues = grid.colValues
+    content = []
+    for r in range(grid.size):
+        row = [grid.rowValues[r]]
+        cells = [[grid.getCellValue((r, c)), (r,c)] for c in range(len(grid.map[r]))]
+        row.append(cells)
+        content.append(row)
+
+    size = grid.size
+
+    return render_template('all-ai.html', colValues=colValues, bt_content=content, hai_content=content, mrv_content=content, random_content=content, size=size)
+
+@app.route('/solve_all')
+def solve_all():
+    # Backtracking AI
+    app.config['BT-AI'] = BasicAI()
+    app.config['GAME'].player = app.config['BT-AI']
+
+    t0 = process_time()
+    app.config['GAME'].start()
+    t_backtracking = process_time() - t0
+
+    bt_tents = [tent[1] for tent in current_app.config['BT-AI'].solvedTents]
+
+    # Heuristic Backtracking AI
+    current_app.config['GAME'].restart()
+    hai = HAI(current_app.config['GAME'].puzzle)
+    t0 = process_time()
+    app.config['HAI'] = hai.solve()
+    t_hai = process_time() - t0
+
+    hai_tents = current_app.config['HAI'].getTents()
+
+    # MRV AI
+    current_app.config['GAME'].restart()
+    app.config['MRV-AI'] = MRV()
+    current_app.config['GAME'].player = app.config['MRV-AI']
+
+    t0 = process_time()
+    app.config['GAME'].start()
+    t_mrv = process_time() - t0
+
+    mrv_tents = [tent[1] for tent in current_app.config['MRV-AI'].solvedTents]
+    
+    # Random
+    current_app.config['GAME'].restart()
+    app.config['RANDOM-AI'] = RandomAI()
+    current_app.config['GAME'].player = app.config['RANDOM-AI']
+
+    t0 = process_time()
+    app.config['GAME'].start()
+    t_random = process_time() - t0
+
+    random_tents = app.config['GAME'].solution.getTents()
+
+    return jsonify(bt_content=bt_tents, hai_content=hai_tents, mrv_content=mrv_tents, random_content=random_tents, 
+                    bt_time=t_backtracking, hai_time=t_hai, mrv_time=t_mrv, random_time=t_random)
