@@ -184,10 +184,10 @@ def solve_heuristic_ai():
 def mrv_ai_home():
     if request.method == 'POST':
         level = request.form['mrv-level']
-        app.config['mrv_LEVEL'] = level
-        return redirect(url_for('mrv-ai'))
+        app.config['MRV_LEVEL'] = level
+        return redirect(url_for('mrv_ai'))
     else:
-        return render_template('backtracking-home.html')
+        return render_template('mrv-ai-home.html')
 
 @app.route('/mrv-ai')
 def mrv_ai():
@@ -207,7 +207,6 @@ def mrv_ai():
         content.append(row)
 
     size = grid.size
-
     return render_template('mrv-ai.html', colValues=colValues, content=content, size=size)
 
 @app.route('/solve_mrv_ai')
