@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block home %}
+    <form method="POST" action="/backtracking-home">
+        <label for="bt-level">Pick your level (between 5 and 24):</label>
+        <input type="number" name="bt-level" min=5 max=24 required>
+        <button type="submit" value="submit">Submit</button>
+    </form>
+{% endblock %}

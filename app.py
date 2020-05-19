@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, jsonify, current_ap
 from game.PuzzleGenerator import PuzzleGenerator
 from game.GameManager import GameManager
 from game.hai import HAI
+from game.ComputerAI import ComputerAI
 import os
 from copy import deepcopy
 from time import process_time
@@ -50,19 +51,48 @@ def get_move():
 
     return jsonify(content=grid.getCellValue(pos), status=status)
 
-@app.route('/random-home', methods=['GET','POST'])
-def random_home():
+############################# Backtracking AI Page ###############################
+@app.route('/backtracking-home', methods=['GET','POST'])
+def backtracking_home():
     if request.method == 'POST':
-        level = request.form['random-level']
-        app.config['RANDOM_LEVEL'] = level
-        return redirect(url_for('random'))
+        level = request.form['bt-level']
+        app.config['BT_LEVEL'] = level
+        return redirect(url_for('backtracking'))
     else:
-        return render_template('random-home.html')
+        return render_template('backtracking-home.html')
 
-@app.route('/random')
-def random():
-    return render_template('random.html')
+@app.route('/backtracking')
+def backtracking():
+    app.config['BT-AI'] = ComputerAI()
+    app.config['GAME'] = GameManager(current_app.config['BT-AI'], int(current_app.config['BT_LEVEL']))
 
+    grid = current_app.config['GAME'].puzzle
+
+    grid.displayGrid()
+
+    colValues = grid.colValues
+    content = []
+    for r in range(grid.size):
+        row = [grid.rowValues[r]]
+        cells = [[grid.getCellValue((r, c)), (r,c)] for c in range(len(grid.map[r]))]
+        row.append(cells)
+        content.append(row)
+
+    size = grid.size
+
+    return render_template('backtracking.html', colValues=colValues, content=content, size=size)
+
+@app.route('/solve_backtracking')
+def solve_backtracking():
+    t0 = process_time()
+    app.config['GAME'].start()
+    t0 = process_time() - t0
+
+    tents = [tent[1] for tent in current_app.config['BT-AI'].solvedTents]
+
+    return jsonify(solved_content=tents, time=t0)
+
+############################# Heuristic AI Page ###############################
 @app.route('/heuristic-ai-home', methods=['GET','POST'])
 def heuristic_ai_home():
     if request.method == 'POST':
@@ -97,10 +127,10 @@ def solve_heuristic_ai():
     game = deepcopy(current_app.config['GAME'].puzzle)
     hai = HAI(game)
     t0 = process_time()
-    app.config['AI'] = hai.solve()
+    app.config['HAI'] = hai.solve()
     t0 = process_time() - t0
 
-    solved_grid = current_app.config['AI']
+    solved_grid = current_app.config['HAI']
 
     tents = solved_grid.getTents()
 
