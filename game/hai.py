@@ -1,12 +1,12 @@
-from PuzzleGenerator import PuzzleGenerator
-from Tree import Tree
+from .PuzzleGenerator import PuzzleGenerator
+from .Tree import Tree
 from copy import deepcopy
 import time
 
-print("test")
-gen = PuzzleGenerator(15)
-puzzle = gen.getPuzzle()
-sol = gen.getSolution()
+# print("test")
+# gen = PuzzleGenerator(15)
+# puzzle = gen.getPuzzle()
+# sol = gen.getSolution()
 backtrackList = []
 
 
@@ -64,8 +64,8 @@ class HAI:
             return False
         return True
 
-obj = HAI(puzzle)
-t0 = time.clock()
-out = obj.solve()
-print(time.clock() - t0, "seconds")
-print(out.map)
+# obj = HAI(puzzle)
+# t0 = time.process_time()
+# out = obj.solve()
+# print(time.process_time() - t0, "seconds")
+# print(out.map)
