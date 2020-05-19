@@ -111,6 +111,27 @@ class Grid:
         if self.checkWithinGrid(pos):
             return len(self.getNeighborCells(pos)) == len(self.getAvailableNeighborCells(pos))
 
+    def checkifValidTent(self, pos: tuple, curRowValues, curColValues):
+        """ Actual Check if tent postion is valid  """
+        
+        if self.checkWithinGrid(pos) == False:
+            return False
+
+        if curRowValues[pos[0]] == 0:
+            return False
+        if curColValues[pos[1]] == 0:
+            return False
+
+        
+        neighborsPos = self.getNeighborCells(pos)
+        test = self.map[neighborsPos[0][0]][neighborsPos[0][1]]
+        neighborsVal = [list(self.map[neighbor[0]][neighbor[1]] for neighbor in neighborsPos)]
+        
+        for neighbor in neighborsVal:
+            if neighbor == '#':
+                return False
+        return True
+
     def getTents(self):
         """ Returns the list of cells that contain tents """
         return [(row, col)
