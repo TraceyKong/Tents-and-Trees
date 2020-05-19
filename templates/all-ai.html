@@ -62,21 +62,6 @@
                             });
                         }
                         $("#mrv-time").html("Time elasped: " +data.responseJSON.mrv_time + "s");
-
-                        // Random
-                        var random_tents = data.responseJSON.random_content;
-                        for(var i = 0; i < random_tents.length; i++){
-                            pos = '(' + random_tents[i][0] + ', ' + random_tents[i][1] +')';
-                            var img = document.createElement('img');
-                            $(".random_tent").each(function() {
-                                if($(this).attr("value") == pos){
-                                    img.src = "{{url_for('static', filename='tent.png')}}";
-                                    img.className = "tree";
-                                    $(this).html(img);
-                                }
-                            });
-                        }
-                        $("#random-time").html("Time elasped: " +data.responseJSON.random_time + "s");
                     }
                 });
                 return false;
@@ -189,39 +174,6 @@
                     </div>
                 {% endfor %}
                 <div class="m-4" id="mrv-time"></div>
-            </div>
-
-            <div class="m-3">
-                <div>Random</div>
-                <div>
-                    <div class="btn-group col-values" role="group">
-                        {% for col in colValues %}
-                            <div class="col text-center text-light bg-dark col-value">{{ col }}</div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                {% for row in random_content %}
-                    <div>
-                        <div class="btn-group" role="group">
-                            <div class="col text-center text-light bg-dark side-val">{{ row[0] }}</div>
-                            {% for cell in row[1] %}
-                                <button type="button" class="btn btn-outline-dark random_tent" value="{{ cell[1] }}" disabled>
-                                    {% if cell[0] == 'T' %}
-                                        <img src="{{url_for('static', filename='tree.png')}}" class="tree">
-                                    {% endif %}
-                                    {% if cell[0] == '#' %}
-                                        <img src="{{url_for('static', filename='tent.png')}}" class="tree">
-                                    {% endif %}
-                                    {% if cell[0] == '-' %}
-                                        <img src="{{url_for('static', filename='blank.png')}}" class="tree">
-                                    {% endif %}
-                                </button>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endfor %}
-                <div class="m-4" id="random-time"></div>
             </div>
         </div>
     </div>

@@ -281,15 +281,15 @@ def solve_all():
     mrv_tents = [tent[1] for tent in current_app.config['MRV-AI'].solvedTents]
     
     # Random
-    current_app.config['GAME'].restart()
-    app.config['RANDOM-AI'] = RandomAI()
-    current_app.config['GAME'].player = app.config['RANDOM-AI']
+    # current_app.config['GAME'].restart()
+    # app.config['RANDOM-AI'] = RandomAI()
+    # current_app.config['GAME'].player = app.config['RANDOM-AI']
 
-    t0 = process_time()
-    app.config['GAME'].start()
-    t_random = process_time() - t0
+    # t0 = process_time()
+    # app.config['GAME'].start()
+    # t_random = process_time() - t0
 
-    random_tents = app.config['GAME'].solution.getTents()
+    # random_tents = app.config['GAME'].solution.getTents()
 
-    return jsonify(bt_content=bt_tents, hai_content=hai_tents, mrv_content=mrv_tents, random_content=random_tents, 
-                    bt_time=t_backtracking, hai_time=t_hai, mrv_time=t_mrv, random_time=t_random)
+    return jsonify(bt_content=bt_tents, hai_content=hai_tents, mrv_content=mrv_tents, 
+                    bt_time=t_backtracking, hai_time=t_hai, mrv_time=t_mrv)
