@@ -13,4 +13,4 @@ To run the app:
 $ flask run
 ```
 
-You may also view the app via (https://bit.ly/2Til07C)[https://bit.ly/2Til07C]
+You may also view the app via https://bit.ly/2Til07C
